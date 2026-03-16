@@ -101,7 +101,7 @@ export default function WorkerDetails() {
     name: "Rajesh Kumar",
     role: "Electrician",
     rating: 4.6,
-    image: "https://i.pravatar.cc/150?img=12",
+    image: "",
   }
 
   const toggleOpen = (id) => {
