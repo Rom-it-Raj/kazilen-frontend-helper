@@ -3,12 +3,12 @@
 
 import { useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { apiRequest } from '@/utils/api'
 
 export default function CreateAccountClient({ phoneFromQuery }) {
   const router = useRouter()
-
+	const serach = useSearchParams()
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const [dob, setDob] = useState('')
@@ -17,7 +17,7 @@ export default function CreateAccountClient({ phoneFromQuery }) {
   const [touched, setTouched] = useState({})
   const [loading, setLoading] = useState(false)
 
-  const [phone] = useState(phoneFromQuery)
+  const [phone] = serach.get("phone")
 
   const canSubmit = Boolean(
     name.trim() && dob && gender && category && /^\d{10}$/.test(phone)
