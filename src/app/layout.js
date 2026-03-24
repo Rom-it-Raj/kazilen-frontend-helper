@@ -4,6 +4,7 @@ import BottomNav from './components/BottomNav'
 import LocationLoader from './components/LocationLoader';
 import Providers from './providers';
 import NetworkStatus from '../components/NetworkStatus';
+import AuthGuard from './components/AuthGuard';
 
 export const metadata = {
 	title: "Kazilen",
@@ -19,7 +20,9 @@ export default function RootLayout({ children }) {
         <NetworkStatus />
         <Providers>
           <LocationLoader />
-          {children}
+          <AuthGuard>
+            {children}
+          </AuthGuard>
           <BottomNav /> {/* Always included, but self-hides on other pages */}
         </Providers>
       </body>
