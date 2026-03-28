@@ -1,16 +1,37 @@
-import { api } from "../app/lib/api.js";
+const BASE_URL = "http://127.0.01:8000/api/helper";
 
-/**
- * apiRequest facade to support legacy/different call signatures.
- * @param {string} path 
- * @param {string} method 
- * @param {object} body 
- */
-export async function apiRequest(path, method = "GET", body = null) {
-  // Use the internal api function from src/app/lib/api.js via its default export? 
-  // Wait, src/app/lib/api.js doesn't have a default export. It exports 'api' but as a non-exported local.
-  // I should check if I can just import 'api' if I export it from src/app/lib/api.js.
-  
-  // Let's modify src/app/lib/api.js to export 'api' first.
-  return api(path, { method, body });
-}
+export const apiRequest = async (endpoint, method = "Get", body = null) => {
+        const headers = {
+                "Content-Type": "application/json",
+        };
+
+        let token = null;
+        if (typeof window !== "undefined") {
+                token = localStorage.getItem("session_token");
+                if (token) {
+                        headers["Authorization"] = `Bearer ${token}`;
+                }
+        }
+
+        const config = {
+                method,
+                headers,
+                ...(body && { body: JSON.stringify(body) }),
+        };
+
+        try {
+                const response = await fetch(`${BASE_URL}${endpoint}`, config);
+
+                if (response.status === 401) {
+                        if (typeof window !== "undefined")
+                                localStorage.removeItem("session_token");
+                        window.location.href = "/login";
+                        return null;
+                }
+
+                return await response.json();
+        } catch (error) {
+                console.error("API Request Failed:", error);
+                return { error: "Network error occurred" };
+        }
+};
