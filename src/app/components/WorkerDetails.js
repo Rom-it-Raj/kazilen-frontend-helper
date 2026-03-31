@@ -8,35 +8,11 @@ export default function WorkerDetails({ worker }) {
 	const [isSaved, setSaved] = useState(false);
 	const storedId = localStorage.getItem('worker_id');
 	const data = apiRequest('/getSubCat', 'POST', storedId)
-	const oal = [
-		"consult",
-		"hourly",
-		"fan-install",
-		"fan-repair",
-		"light",
-		"home-wiring",
-		"switch-install",
-		"switch-mcb",
-		"switch-repair",
-		"invereter-install",
-		"invereter-maintainance",
-		"cooler-repair",
-		"motor-rewinding",
-	];
 
 	const handleSave = async () => {
 		try {
 			setSaved(true);
-			const payload= {};
-			oal.forEach((item, index) => {
-				payload[item] = {
-					visible: services[index]["enabled"],
-					price: services[index]["price"],
-					details: services[index]["details"],
-				};
-			});
-
-			const res = apiRequest("/update", "POST", payload);
+			const res = apiRequest("/update", "POST", services);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -46,90 +22,11 @@ export default function WorkerDetails({ worker }) {
 
 	const [services, setServices] = useState([data])
 
-//	const [services, setServices] = useState([
-//		{
-//			id: 1,
-//			name: "Book Consultation",
-//			price: 100,
-//			details: "Basic consultation service",
-//			enabled: true,
-//		},
-//		{
-//			id: 2,
-//			name: "Fan",
-//			price: 600,
-//			details: "One-time fixed price service",
-//			enabled: true,
-//		},
-//		{
-//			id: 3,
-//			name: "Light",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 3,
-//			name: "Light",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 4,
-//			name: "Wiring",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 5,
-//			name: "Doorbell",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 6,
-//			name: "MCB",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 7,
-//			name: "Inverter",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 8,
-//			name: "Stabiliser",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//		{
-//			id: 9,
-//			name: "Book by Hour",
-//			price: 80,
-//			details: "Charged per working hour",
-//			enabled: true,
-//		},
-//	]);
-
-	const toggleOpen = (id) => {
-		setServices((prev) =>
-			prev.map((s) => (s.id === id ? { ...s, open: !s.open } : s)),
-		);
-	};
-
 	const toggleEnabled = (id) => {
 		setServices((prev) =>
 			prev.map((s) =>
 				s.id === id
-					? { ...s, enabled: !s.enabled, open: false, editing: false }
+					? { ...s, enabled: !s.visible}
 					: s,
 			),
 		);
