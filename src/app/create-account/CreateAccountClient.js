@@ -9,7 +9,6 @@ import { SkeletonButton } from '../../components/Skeletons'
 
 export default function CreateAccountClient({ phoneFromQuery }) {
   const router = useRouter()
-	const serach = useSearchParams()
   const [name, setName] = useState('')
   const [address, setAddress] = useState('')
   const [dob, setDob] = useState('')
@@ -18,7 +17,7 @@ export default function CreateAccountClient({ phoneFromQuery }) {
   const [touched, setTouched] = useState({})
   const [loading, setLoading] = useState(false)
 
-  const [phone] = serach.get("phone")
+  const [phone] = phoneFromQuery 
 
   const canSubmit = Boolean(
     name.trim() && dob && gender && /^\d{10}$/.test(phone)
